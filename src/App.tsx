@@ -1,14 +1,8 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.less";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        Test
-      </header>
-    </div>
-  );
+  return <div className="App">Learn React</div>;
 }
 
 export default App;
