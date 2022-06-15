@@ -12,10 +12,9 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "antd": "^4.21.0",
-    "commitlint": "^17.0.2",
     "craco-less": "^2.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
-    "prettier": "^2.6.2",
+    "prettier": "^2.7.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
@@ -28,7 +27,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "prettier": "prettier --write \"{**/*,*}.{js,jsx,ts,tsx,json,css,scss,md}\""
+    "prettier": "prettier --write \"{**/*,*}.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "lint": "eslint --fix",
+    "format": "prettier -w ."
   },
   "eslintConfig": {
     "extends": [
@@ -57,14 +58,14 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.0.2",
-    "@commitlint/config-conventional": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^8.0.0"
