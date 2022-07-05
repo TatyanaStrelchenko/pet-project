@@ -1,21 +1,74 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": ["plugin:react/recommended", "airbnb", "airbnb-typescript", "prettier"],
-  "parser": "@typescript-eslint/parser",
+  "extends": ["react-app", "airbnb", "airbnb-typescript", "prettier"],
   "parserOptions": {
-    "project": "./tsconfig.json",
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    "project": "./tsconfig.json"
   },
-  "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "semi": "off",
-    "@typescript-eslint/semi": ["error"]
-  }
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "mjs": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "object-curly-newline": "off",
+    "prefer-destructuring": "off",
+    "react/destructuring-assignment": "off",
+    "react/no-multi-comp": [
+      "error",
+      {
+        "ignoreStateless": true
+      }
+    ],
+    "react/jsx-filename-extension": [
+      0,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "import/order": "error",
+    "react/sort-comp": "off",
+    "spaced-comment": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-unstable-nested-components": "off",
+    "react/no-namespace": "off",
+    "react/prefer-exact-props": "off",
+    "react/no-arrow-function-lifecycle": "off",
+    "react/no-invalid-html-attribute": "off",
+    "react/no-unused-class-component-methods": "off",
+    "import/no-import-module-exports": "off",
+    "import/no-relative-packages": "off",
+    "react/function-component-definition": "off",
+    "react/react-in-jsx-scope": "off",
+    "import/no-extraneous-dependencies": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-debugger": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "no-plusplus": "off",
+    "prefer-template": "off",
+    "global-require": "off",
+    "react/jsx-curly-brace-presence": "off",
+    "react/require-default-props": "off",
+    "react/no-children-prop": "off",
+    "consistent-return": "off",
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/no-throw-literal": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+    "no-else-return": "off",
+    "react/prop-types": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.tsx"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }

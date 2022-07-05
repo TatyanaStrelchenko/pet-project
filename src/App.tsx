@@ -1,8 +1,13 @@
-import React from 'react';
+import React from "react";
 import "./App.less";
+import QuotesListContainer from "./components/QuotesListContainer/QuotesListContainer";
 
-function App() {
-  return <div className="App">Learn React</div>;
-}
+const App = () => (
+  <div className="App">
+    <div className="container">
+      <QuotesListContainer />
+    </div>
+  </div>
+);
 
 export default App;
