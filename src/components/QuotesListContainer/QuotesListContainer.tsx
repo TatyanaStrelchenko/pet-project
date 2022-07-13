@@ -54,7 +54,7 @@ const QuotesListContainer = () => {
       );
 
       if (searchShow) {
-        return filteredResult.map((item) => <Card title={item}>{item}</Card>);
+        return filteredResult.map((item: Quote) => <Card title={item.name}>{item.quote}</Card>);
       }
     }
   };
