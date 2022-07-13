@@ -1,11 +1,6 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo
-} from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 // import useFetch from "react-fetch-hook";
-import axios from 'axios';
+import axios from "axios";
 
 import { Input, Card } from "antd";
 import { debounce } from "lodash";
@@ -22,8 +17,8 @@ const QuotesListContainer = () => {
   const [searchShow, setSearchShow] = useState(false);
 
   const [data, setData] = useState([]);
-    const [url, setUrl] = useState(
-    'https://api.mockaroo.com/api/400c5b90?count=30&key=bee4ecb0',
+  const [url, setUrl] = useState(
+    "https://api.mockaroo.com/api/400c5b90?count=30&key=bee4ecb0"
   );
 
   useEffect(() => {
@@ -31,19 +26,15 @@ const QuotesListContainer = () => {
       const result = await axios(url);
 
       setData(result.data);
-      console.log('res', result)
-      console.log('res.data', result.data)
-
     };
 
     fetchData();
   }, [url]);
 
-
   const handleChange = (event: any) => {
     setSearchField(event.target.value);
 
-    //TODO - optimize 
+    //TODO - optimize
     if (event.target.value === "") {
       setSearchShow(false);
     } else {
@@ -51,9 +42,7 @@ const QuotesListContainer = () => {
     }
   };
 
-  const debouncedChangeHandler = useMemo(
-    () => debounce(handleChange, 300)
-  , []);
+  const debouncedChangeHandler = useMemo(() => debounce(handleChange, 300), []);
 
   const searchQuotes = (params: string) => {
     if (data) {
@@ -65,13 +54,11 @@ const QuotesListContainer = () => {
       );
 
       if (searchShow) {
-        return filteredResult.map((item) => (
-          <Card title={item}>{item}</Card>
-        ));
+        return filteredResult.map((item) => <Card title={item}>{item}</Card>);
       }
     }
   };
-  
+
   return (
     <div className="search-block">
       <h1>Search</h1>
