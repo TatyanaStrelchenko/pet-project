@@ -7,46 +7,36 @@ import { debounce } from "lodash";
 import QuotesList from "../QuotesList";
 import { Quote } from "../../utils/types";
 
+import { getRequest } from "../../services/api-request";
 import "./QuotesListContainer.less";
-import { useFetchQuotes } from "../../hooks/useFetchQuotes";
+
 
 const { Search } = Input;
 
 const QuotesListContainer = () => {
   const [searchField, setSearchField] = useState("");
   const [searchShow, setSearchShow] = useState(false);
-
   const [data, setData] = useState([]);
-  const [url, setUrl] = useState(
-    "https://api.mockaroo.com/api/400c5b90?count=30&key=bee4ecb0"
-  );
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios(url);
-
-      setData(result.data);
+      //getQuotes
+      const result = getRequest(setData);
+      // setData(result.data);
     };
 
     fetchData();
-  }, [url]);
+  }, []);
 
   const handleChange = (event: any) => {
     setSearchField(event.target.value);
-
-    //TODO - optimize
-    if (event.target.value === "") {
-      setSearchShow(false);
-    } else {
-      setSearchShow(true);
-    }
+    setSearchShow(!(event.target.value === ""))
   };
 
-  const debouncedChangeHandler = useMemo(() => debounce(handleChange, 300), []);
+  const debouncedChangeHandler = useMemo(() => debounce(handleChange, 100), []);
 
   const searchQuotes = (params: string) => {
     if (data) {
-      // console.log('data2', data.quotes)
       const filteredResult = data.filter(
         (item: any) =>
           new RegExp(params).test(item.name) ||
@@ -54,7 +44,9 @@ const QuotesListContainer = () => {
       );
 
       if (searchShow) {
-        return filteredResult.map((item: Quote) => <Card title={item.name}>{item.quote}</Card>);
+        return filteredResult.map((item: Quote) => (
+          <Card title={item.name}>{item.quote}</Card>
+        ));
       }
     }
   };
