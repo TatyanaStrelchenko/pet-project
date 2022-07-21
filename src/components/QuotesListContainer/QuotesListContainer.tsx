@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 // import useFetch from "react-fetch-hook";
-import axios from "axios";
+// import axios from "axios";
 
 import { Input, Card } from "antd";
 import { debounce } from "lodash";
 import QuotesList from "../QuotesList";
 import { Quote } from "../../utils/types";
 
-import { getRequest } from "../../services/api-request";
+import { useFetchQuotes } from "../../hooks/useFetchQuotes";
 import "./QuotesListContainer.less";
+import { getQuotes } from "../../services/quotes-service";
 
 
 const { Search } = Input;
@@ -16,13 +17,15 @@ const { Search } = Input;
 const QuotesListContainer = () => {
   const [searchField, setSearchField] = useState("");
   const [searchShow, setSearchShow] = useState(false);
+  // const [data, setData] = useFetchQuotes();
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       //getQuotes
-      const result = getRequest(setData);
-      // setData(result.data);
+      const result = await getQuotes();
+      setData(result.data);
+      console.log('result', result)
     };
 
     fetchData();
@@ -30,7 +33,7 @@ const QuotesListContainer = () => {
 
   const handleChange = (event: any) => {
     setSearchField(event.target.value);
-    setSearchShow(!(event.target.value === ""))
+    setSearchShow(!(event.target.value === ""));
   };
 
   const debouncedChangeHandler = useMemo(() => debounce(handleChange, 100), []);
