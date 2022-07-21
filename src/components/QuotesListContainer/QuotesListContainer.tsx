@@ -11,7 +11,6 @@ import { useFetchQuotes } from "../../hooks/useFetchQuotes";
 import "./QuotesListContainer.less";
 import { getQuotes } from "../../services/quotes-service";
 
-
 const { Search } = Input;
 
 const QuotesListContainer = () => {
@@ -24,8 +23,8 @@ const QuotesListContainer = () => {
     const fetchData = async () => {
       //getQuotes
       const result = await getQuotes();
-      setData(result.data);
-      console.log('result', result)
+      setData(result);
+      console.log("result", result);
     };
 
     fetchData();
