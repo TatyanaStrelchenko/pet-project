@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 
-import { Input, Card, Spin, Button, Tooltip } from "antd";
+import { Input, Card, Spin, Button, Tooltip, Row, Col } from "antd";
 import { debounce } from "lodash";
 import { SortAscendingOutlined } from "@ant-design/icons";
 
@@ -52,36 +52,37 @@ const QuotesListContainer = () => {
       <div className="card-holder">
         <Card
           style={{
-            width: 300,
+            width: 400,
             margin: "auto",
           }}
         >
           <Row gutter={[16, 16]}>
-  <Col span={8}><Search
-            placeholder="Search quotes"
-            enterButton
-            onChange={debouncedChangeHandler}
-          /></Col>
-<Col span={8}><Tooltip title="sort by name">
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<SortAscendingOutlined />}
-            />
-            </Tooltip></Col>
-            <Col>    <Tooltip title="sort by quote">
-            <Button
-              type="default"
-              shape="circle"
-              icon={<SortAscendingOutlined />}
-            />
-          </Tooltip></Col>
-</Row>
-          
-          
-      
-          </div>
-      
+            <Col span={18}>
+              <Search
+                placeholder="Search quotes"
+                enterButton
+                onChange={debouncedChangeHandler}
+              />
+            </Col>
+            <Col span={3}>
+              <Tooltip title="Sort by name">
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={<SortAscendingOutlined />}
+                />
+              </Tooltip>
+            </Col>
+            <Col span={3}>
+              <Tooltip title="Sort by quote">
+                <Button
+                  type="default"
+                  shape="circle"
+                  icon={<SortAscendingOutlined />}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
         </Card>
       </div>
       <QuotesList data={filteredList} />
