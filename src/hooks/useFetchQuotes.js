@@ -6,13 +6,13 @@ export const useFetchQuotes = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-    useEffect(() => {
-    const fetchData =  async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       setIsError(false);
-        setIsLoading(true);
+      setIsLoading(true);
 
       try {
-          const result =  await getQuotes();
+        const result = await getQuotes();
 
         setData(result);
       } catch (error) {
@@ -22,11 +22,8 @@ export const useFetchQuotes = () => {
       setIsLoading(false);
     };
 
-      fetchData();
-
+    fetchData();
   }, []);
-    
-
 
   return { data, isLoading, isError };
 };

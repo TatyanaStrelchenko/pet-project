@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 
-import { Input, Card, Spin } from "antd";
+import { Input, Card, Spin, Button, Tooltip } from "antd";
 import { debounce } from "lodash";
+import { SortAscendingOutlined } from '@ant-design/icons';
+
 import QuotesList from "../QuotesList";
 
 import { useFetchQuotes } from "../../hooks/useFetchQuotes";
@@ -15,30 +17,33 @@ const QuotesListContainer = () => {
   const { data, isError, isLoading } = useFetchQuotes();
 
   useEffect(() => {
-    setFullList(data)
-    setFilteredList(data)
+    setFullList(data);
+    setFilteredList(data);
   }, [data]);
 
-
-  const debouncedChangeHandler = useMemo(() => debounce((event: any) => {
-    if (event.target.value === "") {
-      setFilteredList(fullList)
-    } else {
-      const filteredResult = data.filter(
-        (item: any) =>
-          new RegExp(event.target.value).test(item.name) ||
-          new RegExp(event.target.value).test(item.quotes)
-      );
-      setFilteredList(filteredResult)
-    }
-  }, 300), [data, fullList]);
+  const debouncedChangeHandler = useMemo(
+    () =>
+      debounce((event: any) => {
+        if (event.target.value === "") {
+          setFilteredList(fullList);
+        } else {
+          const filteredResult = data.filter(
+            (item: any) =>
+              new RegExp(event.target.value).test(item.name) ||
+              new RegExp(event.target.value).test(item.quotes)
+          );
+          setFilteredList(filteredResult);
+        }
+      }, 300),
+    [data, fullList]
+  );
 
   if (isLoading) {
-    return <Spin size="large"/>
+    return <Spin size="large" />;
   }
 
   if (isError) {
-    return <>Error</>
+    return <>Error</>;
   }
 
   return (
@@ -56,6 +61,13 @@ const QuotesListContainer = () => {
             enterButton
             onChange={debouncedChangeHandler}
           />
+              <Tooltip title="sort by name">
+
+            <Button type="primary" shape="circle" icon={<SortAscendingOutlined />} />
+          </Tooltip>
+          <Tooltip title="sort by quote">
+          <Button type="primary" shape="circle" icon={<SortAscendingOutlined />} />
+</Tooltip>
         </Card>
       </div>
       <QuotesList data={filteredList} />
