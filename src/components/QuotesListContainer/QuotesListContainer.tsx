@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 
 import { Input, Card, Spin, Button, Tooltip } from "antd";
 import { debounce } from "lodash";
-import { SortAscendingOutlined } from '@ant-design/icons';
+import { SortAscendingOutlined } from "@ant-design/icons";
 
 import QuotesList from "../QuotesList";
 
@@ -56,18 +56,32 @@ const QuotesListContainer = () => {
             margin: "auto",
           }}
         >
-          <Search
+          <Row gutter={[16, 16]}>
+  <Col span={8}><Search
             placeholder="Search quotes"
             enterButton
             onChange={debouncedChangeHandler}
-          />
-              <Tooltip title="sort by name">
-
-            <Button type="primary" shape="circle" icon={<SortAscendingOutlined />} />
-          </Tooltip>
-          <Tooltip title="sort by quote">
-          <Button type="primary" shape="circle" icon={<SortAscendingOutlined />} />
-</Tooltip>
+          /></Col>
+<Col span={8}><Tooltip title="sort by name">
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<SortAscendingOutlined />}
+            />
+            </Tooltip></Col>
+            <Col>    <Tooltip title="sort by quote">
+            <Button
+              type="default"
+              shape="circle"
+              icon={<SortAscendingOutlined />}
+            />
+          </Tooltip></Col>
+</Row>
+          
+          
+      
+          </div>
+      
         </Card>
       </div>
       <QuotesList data={filteredList} />
