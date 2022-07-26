@@ -1,4 +1,4 @@
 export type Quote = {
   name: string;
-  quote: string;
+  quotes: string;
 };

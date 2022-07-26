@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { getQuotes } from "../services/quotes-service";
 
-export const useFetchQuotes = (baseUrl) => {
+export const useFetchQuotes = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
+    useEffect(() => {
+    const fetchData =  async () => {
       setIsError(false);
-      setIsLoading(true);
+        setIsLoading(true);
 
       try {
-        const result = await axios(baseUrl);
+          const result =  await getQuotes();
 
-        setData(result.data);
+        setData(result);
       } catch (error) {
         setIsError(true);
       }
@@ -22,8 +22,11 @@ export const useFetchQuotes = (baseUrl) => {
       setIsLoading(false);
     };
 
-    fetchData();
-  }, [baseUrl]);
+      fetchData();
 
-  return [{ data, isLoading, isError }];
+  }, []);
+    
+
+
+  return { data, isLoading, isError };
 };

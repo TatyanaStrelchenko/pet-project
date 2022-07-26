@@ -1,57 +1,45 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-// import useFetch from "react-fetch-hook";
-// import axios from "axios";
+import { useState, useEffect, useMemo } from "react";
 
-import { Input, Card } from "antd";
+import { Input, Card, Spin } from "antd";
 import { debounce } from "lodash";
 import QuotesList from "../QuotesList";
-import { Quote } from "../../utils/types";
 
 import { useFetchQuotes } from "../../hooks/useFetchQuotes";
 import "./QuotesListContainer.less";
-import { getQuotes } from "../../services/quotes-service";
 
 const { Search } = Input;
 
 const QuotesListContainer = () => {
-  const [searchField, setSearchField] = useState("");
-  const [searchShow, setSearchShow] = useState(false);
-  // const [data, setData] = useFetchQuotes();
-  const [data, setData] = useState([]);
+  const [fullList, setFullList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const { data, isError, isLoading } = useFetchQuotes();
 
   useEffect(() => {
-    const fetchData = async () => {
-      //getQuotes
-      const result = await getQuotes();
-      setData(result);
-      console.log("result", result);
-    };
+    setFullList(data)
+    setFilteredList(data)
+  }, [data]);
 
-    fetchData();
-  }, []);
 
-  const handleChange = (event: any) => {
-    setSearchField(event.target.value);
-    setSearchShow(!(event.target.value === ""));
-  };
-
-  const debouncedChangeHandler = useMemo(() => debounce(handleChange, 100), []);
-
-  const searchQuotes = (params: string) => {
-    if (data) {
+  const debouncedChangeHandler = useMemo(() => debounce((event: any) => {
+    if (event.target.value === "") {
+      setFilteredList(fullList)
+    } else {
       const filteredResult = data.filter(
         (item: any) =>
-          new RegExp(params).test(item.name) ||
-          new RegExp(params).test(item.quote)
+          new RegExp(event.target.value).test(item.name) ||
+          new RegExp(event.target.value).test(item.quotes)
       );
-
-      if (searchShow) {
-        return filteredResult.map((item: Quote) => (
-          <Card title={item.name}>{item.quote}</Card>
-        ));
-      }
+      setFilteredList(filteredResult)
     }
-  };
+  }, 300), [data, fullList]);
+
+  if (isLoading) {
+    return <Spin size="large"/>
+  }
+
+  if (isError) {
+    return <>Error</>
+  }
 
   return (
     <div className="search-block">
@@ -70,8 +58,7 @@ const QuotesListContainer = () => {
           />
         </Card>
       </div>
-      <div className="search-results">{searchQuotes(searchField)}</div>
-      <QuotesList data={data} />
+      <QuotesList data={filteredList} />
     </div>
   );
 };

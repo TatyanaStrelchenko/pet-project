@@ -10,7 +10,7 @@ const QuotesList = ({ data }: { data: Quote[] | undefined }) => (
     renderItem={(item: Quote) => (
       <List.Item>
         <h3>{item.name}</h3>
-        <p>{item.quote}</p>
+        <p>{item.quotes}</p>
       </List.Item>
     )}
   />

@@ -1,12 +1,6 @@
 import { getRequest } from "./api-request";
 
-const baseURL = "https://api.mockaroo.com/api/400c5b90?count=30&key=bee4ecb0";
+const baseURL = "https://api.mockaroo.com/api/fa1cfd10?count=100&key=c8ac3e80";
 
-// export const getQuotes = () =>( getRequest(baseURL).then((response)=> response.data))
+export const getQuotes = async () => getRequest(baseURL)
 
-// export const getQuotes = () =>( getRequest(baseURL).then((response)=> response))
-
-export const getQuotes = async () => {
-  const result = await getRequest(baseURL);
-  return result;
-};
