@@ -2,7 +2,10 @@ import { useState, useEffect, useMemo } from "react";
 
 import { Input, Card, Spin, Button, Tooltip, Row, Col } from "antd";
 import { debounce } from "lodash";
-import { SortAscendingOutlined, SortDescendingOutlined } from "@ant-design/icons";
+import {
+  SortAscendingOutlined,
+  SortDescendingOutlined,
+} from "@ant-design/icons";
 
 import QuotesList from "../QuotesList";
 
@@ -15,7 +18,7 @@ const QuotesListContainer = () => {
   const [fullList, setFullList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const { data, isError, isLoading } = useFetchQuotes();
-  const [isSortable, setIsSortable] = useState(false);
+  const [isSortableBy, setIsSortableBy] = useState(false);
 
   useEffect(() => {
     setFullList(data);
@@ -25,7 +28,7 @@ const QuotesListContainer = () => {
   const debouncedChangeHandler = useMemo(
     () =>
       debounce((event: any) => {
-        const searchWord = event.target.value.toLowerCase()
+        const searchWord = event.target.value.toLowerCase();
         if (event.target.value === "") {
           setFilteredList(fullList);
         } else {
@@ -40,26 +43,28 @@ const QuotesListContainer = () => {
     [data, fullList]
   );
 
-  const sortByName = (props: string) => {
-    console.log('props', props)
-    if (!isSortable) {
-      const sortList = [...filteredList].sort((a: any, b: any) => b.props > a.props ? 1 : -1)
-      console.log('sortList1', sortList)
-      setIsSortable(true);
+  const sortBy = (param: string) => {
+    const list = filteredList;
+    if(!list.length) return
+    if (param.trim() === '') return
+    
+    if (!isSortableBy) {
+      const sortList = [...list].sort((a: any, b: any) =>
+        b[param] > a[param] ? 1 : -1
+      );
+      setIsSortableBy(true);
+      console.log('sortList', sortList)
       setFilteredList(sortList);
-      return sortList
     } else {
-      const sortList = [...filteredList].sort((a: any, b: any) => a.props > b.props ? 1 : -1)
-      console.log('sortList2', sortList)
-      setIsSortable(false);
+      const sortList = [...list].sort((a: any, b: any) =>
+        a[param] > b[param] ? 1 : -1
+      );
+      setIsSortableBy(false);
       setFilteredList(sortList);
-      return sortList
+      console.log('sortList2', sortList)
     }
-  }
 
-  const sortByQuote = () => {
-    console.log('sort')
-  }
+  };
 
   if (isLoading) {
     return <Spin size="large" />;
@@ -92,8 +97,14 @@ const QuotesListContainer = () => {
                 <Button
                   type="primary"
                   shape="circle"
-                  icon={isSortable ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-                  onClick={() =>sortByName('name')}
+                  icon={
+                    isSortableBy ? (
+                      <SortAscendingOutlined />
+                    ) : (
+                      <SortDescendingOutlined />
+                    )
+                  }
+                  onClick={() => sortBy("name")}
                 />
               </Tooltip>
             </Col>
@@ -102,8 +113,12 @@ const QuotesListContainer = () => {
                 <Button
                   type="default"
                   shape="circle"
-                  icon={<SortAscendingOutlined />}
-                  onClick={() =>sortByName('quotes')}
+                  icon={isSortableBy ? (
+                    <SortAscendingOutlined />
+                  ) : (
+                    <SortDescendingOutlined />
+                  )}
+                  onClick={() => sortBy("quotes")}
                 />
               </Tooltip>
             </Col>
