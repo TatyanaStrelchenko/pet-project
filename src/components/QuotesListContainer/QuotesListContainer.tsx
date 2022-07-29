@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 
 import { Input, Card, Spin, Button, Tooltip, Row, Col } from "antd";
 import { debounce } from "lodash";
-import { SortAscendingOutlined } from "@ant-design/icons";
+import { SortAscendingOutlined, SortDescendingOutlined } from "@ant-design/icons";
 
 import QuotesList from "../QuotesList";
 
@@ -15,6 +15,7 @@ const QuotesListContainer = () => {
   const [fullList, setFullList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const { data, isError, isLoading } = useFetchQuotes();
+  const [isSortable, setIsSortable] = useState(false);
 
   useEffect(() => {
     setFullList(data);
@@ -24,19 +25,41 @@ const QuotesListContainer = () => {
   const debouncedChangeHandler = useMemo(
     () =>
       debounce((event: any) => {
+        const searchWord = event.target.value.toLowerCase()
         if (event.target.value === "") {
           setFilteredList(fullList);
         } else {
           const filteredResult = data.filter(
             (item: any) =>
-              new RegExp(event.target.value).test(item.name) ||
-              new RegExp(event.target.value).test(item.quotes)
+              new RegExp(searchWord).test(item.name.toLowerCase()) ||
+              new RegExp(searchWord).test(item.quotes.toLowerCase())
           );
           setFilteredList(filteredResult);
         }
       }, 300),
     [data, fullList]
   );
+
+  const sortByName = (props: string) => {
+    console.log('props', props)
+    if (!isSortable) {
+      const sortList = [...filteredList].sort((a: any, b: any) => b.props > a.props ? 1 : -1)
+      console.log('sortList1', sortList)
+      setIsSortable(true);
+      setFilteredList(sortList);
+      return sortList
+    } else {
+      const sortList = [...filteredList].sort((a: any, b: any) => a.props > b.props ? 1 : -1)
+      console.log('sortList2', sortList)
+      setIsSortable(false);
+      setFilteredList(sortList);
+      return sortList
+    }
+  }
+
+  const sortByQuote = () => {
+    console.log('sort')
+  }
 
   if (isLoading) {
     return <Spin size="large" />;
@@ -69,7 +92,8 @@ const QuotesListContainer = () => {
                 <Button
                   type="primary"
                   shape="circle"
-                  icon={<SortAscendingOutlined />}
+                  icon={isSortable ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
+                  onClick={() =>sortByName('name')}
                 />
               </Tooltip>
             </Col>
@@ -79,6 +103,7 @@ const QuotesListContainer = () => {
                   type="default"
                   shape="circle"
                   icon={<SortAscendingOutlined />}
+                  onClick={() =>sortByName('quotes')}
                 />
               </Tooltip>
             </Col>

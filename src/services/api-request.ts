@@ -1,11 +1,21 @@
+import { notification } from "antd";
 import axios from "axios";
-//check error handling
+
+
+const openNotification = (message: string) => {
+  notification.open({
+    message: 'Something went wrong!',
+    description: `${message}`,
+  });
+};
+
+
 export const getRequest = async (url: string) =>
   axios
     .get(url)
     .then((response) => response.data)
     .catch((error) => {
-      console.log(error);
+      openNotification(error);
     });
 
 export const postRequest = async (url: string) =>
@@ -13,7 +23,7 @@ export const postRequest = async (url: string) =>
     .post(url, {})
     .then((response) => response.data)
     .catch((error) => {
-      console.log(error);
+      openNotification(error);
     });
 
 export const putRequest = async (url: string) =>
@@ -21,7 +31,7 @@ export const putRequest = async (url: string) =>
     .put(`${url}/1`, {})
     .then((response) => response.data)
     .catch((error) => {
-      console.log(error);
+      openNotification(error);
     });
 
 export const deleteRequest = async (url: string) =>
