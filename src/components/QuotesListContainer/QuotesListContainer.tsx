@@ -1,96 +1,131 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo
-} from "react";
-// import useFetch from "react-fetch-hook";
-import axios from 'axios';
+import { useState, useEffect, useMemo } from "react";
 
-import { Input, Card } from "antd";
+import { Input, Card, Spin, Button, Tooltip, Row, Col } from "antd";
 import { debounce } from "lodash";
-import QuotesList from "../QuotesList";
-import { Quote } from "../../utils/types";
+import {
+  SortAscendingOutlined,
+  SortDescendingOutlined,
+} from "@ant-design/icons";
 
-import "./QuotesListContainer.less";
+import QuotesList from "../QuotesList";
+
 import { useFetchQuotes } from "../../hooks/useFetchQuotes";
+import "./QuotesListContainer.less";
 
 const { Search } = Input;
 
 const QuotesListContainer = () => {
-  const [searchField, setSearchField] = useState("");
-  const [searchShow, setSearchShow] = useState(false);
-
-  const [data, setData] = useState([]);
-    const [url, setUrl] = useState(
-    'https://api.mockaroo.com/api/400c5b90?count=30&key=bee4ecb0',
-  );
+  const [fullList, setFullList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const { data, isError, isLoading } = useFetchQuotes();
+  const [isSortableBy, setIsSortableBy] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(url);
-
-      setData(result.data);
-      console.log('res', result)
-      console.log('res.data', result.data)
-
-    };
-
-    fetchData();
-  }, [url]);
-
-
-  const handleChange = (event: any) => {
-    setSearchField(event.target.value);
-
-    //TODO - optimize 
-    if (event.target.value === "") {
-      setSearchShow(false);
-    } else {
-      setSearchShow(true);
-    }
-  };
+    setFullList(data);
+    setFilteredList(data);
+  }, [data]);
 
   const debouncedChangeHandler = useMemo(
-    () => debounce(handleChange, 300)
-  , []);
+    () =>
+      debounce((event: any) => {
+        const searchWord = event.target.value.toLowerCase();
+        if (event.target.value === "") {
+          setFilteredList(fullList);
+        } else {
+          const filteredResult = data.filter(
+            (item: any) =>
+              new RegExp(searchWord).test(item.name.toLowerCase()) ||
+              new RegExp(searchWord).test(item.quotes.toLowerCase())
+          );
+          setFilteredList(filteredResult);
+        }
+      }, 300),
+    [data, fullList]
+  );
 
-  const searchQuotes = (params: string) => {
-    if (data) {
-      // console.log('data2', data.quotes)
-      const filteredResult = data.filter(
-        (item: any) =>
-          new RegExp(params).test(item.name) ||
-          new RegExp(params).test(item.quote)
+  const sortBy = (param: string) => {
+    const list = filteredList;
+    if(!list.length) return
+    if (param.trim() === '') return
+    
+    if (!isSortableBy) {
+      const sortList = [...list].sort((a: any, b: any) =>
+        b[param] > a[param] ? 1 : -1
       );
-
-      if (searchShow) {
-        return filteredResult.map((item) => (
-          <Card title={item}>{item}</Card>
-        ));
-      }
+      setIsSortableBy(true);
+      console.log('sortList', sortList)
+      setFilteredList(sortList);
+    } else {
+      const sortList = [...list].sort((a: any, b: any) =>
+        a[param] > b[param] ? 1 : -1
+      );
+      setIsSortableBy(false);
+      setFilteredList(sortList);
+      console.log('sortList2', sortList)
     }
+
   };
-  
+
+  if (isLoading) {
+    return <Spin size="large" />;
+  }
+
+  if (isError) {
+    return <>Error</>;
+  }
+
   return (
     <div className="search-block">
       <h1>Search</h1>
       <div className="card-holder">
         <Card
           style={{
-            width: 300,
+            width: 400,
             margin: "auto",
           }}
         >
-          <Search
-            placeholder="Search quotes"
-            enterButton
-            onChange={debouncedChangeHandler}
-          />
+          <Row gutter={[16, 16]}>
+            <Col span={18}>
+              <Search
+                placeholder="Search quotes"
+                enterButton
+                onChange={debouncedChangeHandler}
+              />
+            </Col>
+            <Col span={3}>
+              <Tooltip title="Sort by name">
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={
+                    isSortableBy ? (
+                      <SortAscendingOutlined />
+                    ) : (
+                      <SortDescendingOutlined />
+                    )
+                  }
+                  onClick={() => sortBy("name")}
+                />
+              </Tooltip>
+            </Col>
+            <Col span={3}>
+              <Tooltip title="Sort by quote">
+                <Button
+                  type="default"
+                  shape="circle"
+                  icon={isSortableBy ? (
+                    <SortAscendingOutlined />
+                  ) : (
+                    <SortDescendingOutlined />
+                  )}
+                  onClick={() => sortBy("quotes")}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
         </Card>
       </div>
-      <div className="search-results">{searchQuotes(searchField)}</div>
-      <QuotesList data={data} />
+      <QuotesList data={filteredList} />
     </div>
   );
 };
