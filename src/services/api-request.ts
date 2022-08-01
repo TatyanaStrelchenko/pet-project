@@ -1,12 +1,5 @@
-import { notification } from "antd";
 import axios from "axios";
-
-const openNotification = (message: string) => {
-  notification.open({
-    message: "Something went wrong!",
-    description: `${message}`,
-  });
-};
+import openNotification from "../utils/notification";
 
 export const getRequest = async (url: string) =>
   axios
