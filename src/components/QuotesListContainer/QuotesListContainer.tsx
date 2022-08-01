@@ -20,7 +20,7 @@ const QuotesListContainer = () => {
   const [filteredList, setFilteredList] = useState([]);
   const { data, isError, isLoading } = useFetchQuotes();
   const [isSortableBy, setIsSortableBy] = useState(false);
-  const [buttonName, setbuttonName] = useState('');
+  const [buttonName, setbuttonName] = useState("");
 
   useEffect(() => {
     setFullList(data);
@@ -52,18 +52,13 @@ const QuotesListContainer = () => {
     if (param.trim() === "") return;
 
     if (!isSortableBy) {
-       list.sort((a: any, b: any) =>
-        b[param] > a[param] ? 1 : -1
-      );
+      list.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
       setIsSortableBy(true);
     } else {
-      list.sort((a: any, b: any) =>
-        a[param] > b[param] ? 1 : -1
-      );
+      list.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
       setIsSortableBy(false);
     }
     setFilteredList(list);
-
   };
 
   if (isLoading) {
@@ -71,12 +66,12 @@ const QuotesListContainer = () => {
   }
 
   if (isError) {
-    return <>Error</>
+    return <>Error</>;
   }
 
   const handleDefaultState = () => {
     setFilteredList(fullList);
-  }
+  };
 
   return (
     <div className="search-block">
@@ -107,7 +102,7 @@ const QuotesListContainer = () => {
                   shape="circle"
                   id="name"
                   icon={
-                    isSortableBy && buttonName === 'quote' ? (
+                    isSortableBy && buttonName === "name" ? (
                       <SortAscendingOutlined />
                     ) : (
                       <SortDescendingOutlined />
@@ -124,13 +119,13 @@ const QuotesListContainer = () => {
                   shape="circle"
                   id="quote"
                   icon={
-                    isSortableBy && buttonName === 'quote' ? (
+                    isSortableBy && buttonName === "quote" ? (
                       <SortAscendingOutlined />
                     ) : (
                       <SortDescendingOutlined />
                     )
                   }
-                  onClick={(e) => sortBy(e,  "quotes")}
+                  onClick={(e) => sortBy(e, "quotes")}
                 />
               </Tooltip>
             </Col>
@@ -140,7 +135,8 @@ const QuotesListContainer = () => {
                   type="default"
                   shape="circle"
                   onClick={() => handleDefaultState()}
-                  id="quote">
+                  id="quote"
+                >
                   def
                 </Button>
               </Tooltip>
