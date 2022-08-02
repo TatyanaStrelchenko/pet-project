@@ -5,6 +5,7 @@ import { debounce } from "lodash";
 import {
   SortAscendingOutlined,
   SortDescendingOutlined,
+  AlignCenterOutlined
 } from "@ant-design/icons";
 
 import QuotesList from "../QuotesList";
@@ -19,7 +20,7 @@ const QuotesListContainer = () => {
   const [fullList, setFullList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const { data, isError, isLoading } = useFetchQuotes();
-  const [isSortableBy, setIsSortableBy] = useState(false);
+  const [isSortableBy, setIsSortableBy] = useState('asc');
   const [buttonName, setbuttonName] = useState("");
 
   useEffect(() => {
@@ -45,20 +46,77 @@ const QuotesListContainer = () => {
     [data, fullList]
   );
 
+  const setIcon = (name: string) => {
+
+    switch (name) {
+      case 'asc': 
+        return <SortDescendingOutlined />
+      case 'desc': 
+        return <SortAscendingOutlined />
+      case 'def':
+        return <AlignCenterOutlined />
+      default:
+        return <SortAscendingOutlined />
+    }
+  }
+
   const sortBy = (e: any, param: string) => {
     setbuttonName(e.currentTarget.id);
     const list = [...filteredList];
     if (!list.length) return;
     if (param.trim() === "") return;
 
-    if (!isSortableBy) {
-      list.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
-      setIsSortableBy(true);
-    } else {
-      list.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
-      setIsSortableBy(false);
+    switch(isSortableBy) {
+      case 'asc': 
+        list.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
+
+        setIsSortableBy('desc');
+        console.log('asc', isSortableBy)
+        setFilteredList(list);
+        setIcon('desc')
+
+
+        //setIcon('desc')
+        break;
+      
+      case 'desc':
+        list.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
+        setIsSortableBy('def');
+        setIcon('asc')
+
+        console.log('desc', isSortableBy)
+        setFilteredList(list);
+
+
+        //setIcon('def')
+        break;
+      
+      case 'def':  
+        setFilteredList(fullList);
+        setIsSortableBy('asc');
+        setIcon('def')
+
+        // console.log('fullList', fullList)
+        // console.log('filteredList', filteredList)
+        console.log('def', data)
+
+
+          //('asc')
+          break;
+      
+      default:
+        setFilteredList(fullList);
+        setIcon('asc')
     }
-    setFilteredList(list);
+
+    // if (!isSortableBy) {
+    //   list.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
+    //   setIsSortableBy(true);
+    // } else {
+    //   list.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
+    //   setIsSortableBy(false);
+    // }
+    // setFilteredList(list);
   };
 
   if (isLoading) {
@@ -92,42 +150,31 @@ const QuotesListContainer = () => {
               />
             </Col>
             <Col span={3}>
-              {/* <SortByButton
+              
+              {filteredList.length ? <SortByButton
                 list={filteredList}
                 id="name"
-              /> */}
-              <Tooltip title="Sort by name">
+              /> : null}
+              {/* <Tooltip title="Sort by name">
                 <Button
                   type="default"
                   shape="circle"
                   id="name"
-                  icon={
-                    isSortableBy && buttonName === "name" ? (
-                      <SortAscendingOutlined />
-                    ) : (
-                      <SortDescendingOutlined />
-                    )
-                  }
+                  icon={setIcon(isSortableBy)}
                   onClick={(e) => sortBy(e, "name")}
                 />
-              </Tooltip>
+              </Tooltip> */}
             </Col>
             <Col span={3}>
-              <Tooltip title="Sort by quote">
+              {/* <Tooltip title="Sort by quote">
                 <Button
                   type="default"
                   shape="circle"
                   id="quote"
-                  icon={
-                    isSortableBy && buttonName === "quote" ? (
-                      <SortAscendingOutlined />
-                    ) : (
-                      <SortDescendingOutlined />
-                    )
-                  }
+                    icon={setIcon(isSortableBy)}
                   onClick={(e) => sortBy(e, "quotes")}
                 />
-              </Tooltip>
+              </Tooltip> */}
             </Col>
             <Col span={3}>
               <Tooltip title="Default">

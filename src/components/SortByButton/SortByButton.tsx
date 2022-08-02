@@ -6,7 +6,7 @@ import {
 import { useState } from "react";
 import { Quote } from "../../utils/types";
 
-const SortByButton = (list: Quote[] | undefined, id: any) => {
+const SortByButton = ({ list, id }: { list: Quote[] | undefined, id: any } ) => {
   const [isSortableBy, setIsSortableBy] = useState(false);
   const [filteredList, setFilteredList] = useState([]);
   const [buttonName, setbuttonName] = useState("");
@@ -44,12 +44,11 @@ const SortByButton = (list: Quote[] | undefined, id: any) => {
         <Button
           type="default"
           shape="circle"
-          // id={id}
+          id={id}
           icon={setIcon()}
           onClick={(e) => sortByParam(e, id)}
         />
       </Tooltip>
-      test
     </div>
   );
 };
