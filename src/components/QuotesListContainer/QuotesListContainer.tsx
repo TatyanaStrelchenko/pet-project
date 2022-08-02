@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 import {
   SortAscendingOutlined,
   SortDescendingOutlined,
-  AlignCenterOutlined
+  AlignCenterOutlined,
 } from "@ant-design/icons";
 
 import QuotesList from "../QuotesList";
@@ -20,7 +20,7 @@ const QuotesListContainer = () => {
   const [fullList, setFullList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const { data, isError, isLoading } = useFetchQuotes();
-  const [isSortableBy, setIsSortableBy] = useState('asc');
+  const [isSortableBy, setIsSortableBy] = useState("asc");
   const [buttonName, setbuttonName] = useState("");
 
   useEffect(() => {
@@ -47,18 +47,17 @@ const QuotesListContainer = () => {
   );
 
   const setIcon = (name: string) => {
-
     switch (name) {
-      case 'asc': 
-        return <SortDescendingOutlined />
-      case 'desc': 
-        return <SortAscendingOutlined />
-      case 'def':
-        return <AlignCenterOutlined />
+      case "asc":
+        return <SortDescendingOutlined />;
+      case "desc":
+        return <SortAscendingOutlined />;
+      case "def":
+        return <AlignCenterOutlined />;
       default:
-        return <SortAscendingOutlined />
+        return <SortAscendingOutlined />;
     }
-  }
+  };
 
   const sortBy = (e: any, param: string) => {
     setbuttonName(e.currentTarget.id);
@@ -66,47 +65,44 @@ const QuotesListContainer = () => {
     if (!list.length) return;
     if (param.trim() === "") return;
 
-    switch(isSortableBy) {
-      case 'asc': 
+    switch (isSortableBy) {
+      case "asc":
         list.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
 
-        setIsSortableBy('desc');
-        console.log('asc', isSortableBy)
+        setIsSortableBy("desc");
+        console.log("asc", isSortableBy);
         setFilteredList(list);
-        setIcon('desc')
-
+        setIcon("desc");
 
         //setIcon('desc')
         break;
-      
-      case 'desc':
+
+      case "desc":
         list.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
-        setIsSortableBy('def');
-        setIcon('asc')
+        setIsSortableBy("def");
+        setIcon("asc");
 
-        console.log('desc', isSortableBy)
+        console.log("desc", isSortableBy);
         setFilteredList(list);
-
 
         //setIcon('def')
         break;
-      
-      case 'def':  
+
+      case "def":
         setFilteredList(fullList);
-        setIsSortableBy('asc');
-        setIcon('def')
+        setIsSortableBy("asc");
+        setIcon("def");
 
         // console.log('fullList', fullList)
         // console.log('filteredList', filteredList)
-        console.log('def', data)
+        console.log("def", data);
 
+        //('asc')
+        break;
 
-          //('asc')
-          break;
-      
       default:
         setFilteredList(fullList);
-        setIcon('asc')
+        setIcon("asc");
     }
 
     // if (!isSortableBy) {
@@ -150,11 +146,7 @@ const QuotesListContainer = () => {
               />
             </Col>
             <Col span={3}>
-              
-              {filteredList.length ? <SortByButton
-                list={filteredList}
-                id="name"
-              /> : null}
+                <SortByButton list={filteredList} id="name" />
               {/* <Tooltip title="Sort by name">
                 <Button
                   type="default"
@@ -166,6 +158,8 @@ const QuotesListContainer = () => {
               </Tooltip> */}
             </Col>
             <Col span={3}>
+              <SortByButton list={filteredList} id="quote" />
+
               {/* <Tooltip title="Sort by quote">
                 <Button
                   type="default"
