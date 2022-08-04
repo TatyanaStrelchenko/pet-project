@@ -51,7 +51,7 @@ const SortByButton = ({
           break;
 
         case ASC:
-          sortList.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
+          sortList.sort((a: Quote, b: Quote) => (b[param] > a[param] ? 1 : -1));
           setIsSortableBy(DESC);
           handleSetFilteredList(sortList);
           break;

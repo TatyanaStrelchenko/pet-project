@@ -28,13 +28,13 @@ const QuotesListContainer = () => {
 
   const debouncedChangeHandler = useMemo(
     () =>
-      debounce((event: any) => {
+      debounce((event: React.ChangeEvent<HTMLInputElement>) => {
         const searchWord = event.target.value.toLowerCase();
         if (event.target.value === "") {
           setFilteredList(fullList);
         } else {
           const filteredResult = data.filter(
-            (item: any) =>
+            (item: Quote) =>
               new RegExp(searchWord).test(item.name.toLowerCase()) ||
               new RegExp(searchWord).test(item.quotes.toLowerCase())
           );
