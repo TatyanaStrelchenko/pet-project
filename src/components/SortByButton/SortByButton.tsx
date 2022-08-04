@@ -8,7 +8,17 @@ import { useState } from "react";
 import { Quote } from "../../utils/types";
 import { ASC, DESC, DEFAULT } from "../../utils/constants";
 
-const SortByButton = ({ list, defaultList, handleSetFilteredList, id }: { list: Quote[]; defaultList: Quote[]; handleSetFilteredList: Function, id: string }) => {
+const SortByButton = ({
+  list,
+  defaultList,
+  handleSetFilteredList,
+  id,
+}: {
+  list: Quote[];
+  defaultList: Quote[];
+  handleSetFilteredList: Function;
+  id: string;
+}) => {
   const [isSortableBy, setIsSortableBy] = useState(DEFAULT);
 
   const setIcon = (name: string) => {
@@ -24,7 +34,7 @@ const SortByButton = ({ list, defaultList, handleSetFilteredList, id }: { list: 
     }
   };
 
-  const sortByParam = (e: any, param: string) => {
+  const sortByParam = (e: React.MouseEvent<HTMLElement, MouseEvent>, param: string) => {
     if (list) {
       const sortList = [...list];
       if (!defaultList.length) return;
@@ -34,22 +44,22 @@ const SortByButton = ({ list, defaultList, handleSetFilteredList, id }: { list: 
         case DEFAULT:
           sortList.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
           setIsSortableBy(ASC);
-          handleSetFilteredList(sortList)
+          handleSetFilteredList(sortList);
           break;
 
         case ASC:
           sortList.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
           setIsSortableBy(DESC);
-          handleSetFilteredList(sortList)
+          handleSetFilteredList(sortList);
           break;
 
         case DESC:
-          handleSetFilteredList(defaultList)
+          handleSetFilteredList(defaultList);
           setIsSortableBy(DEFAULT);
           break;
 
         default:
-          handleSetFilteredList(defaultList)
+          handleSetFilteredList(defaultList);
       }
     }
   };

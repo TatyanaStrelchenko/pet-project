@@ -23,8 +23,8 @@ const QuotesListContainer = () => {
   }, [data]);
 
   const handleSetFilteredList = (newList: Quote[]) => {
-    setFilteredList(newList)
-  }
+    setFilteredList(newList);
+  };
 
   const debouncedChangeHandler = useMemo(
     () =>
@@ -75,10 +75,20 @@ const QuotesListContainer = () => {
               />
             </Col>
             <Col span={3}>
-              <SortByButton list={filteredList} defaultList={fullList} id="name" handleSetFilteredList={handleSetFilteredList} />
+              <SortByButton
+                list={filteredList}
+                defaultList={fullList}
+                id="name"
+                handleSetFilteredList={handleSetFilteredList}
+              />
             </Col>
             <Col span={3}>
-              <SortByButton list={filteredList} defaultList={fullList} id="quotes" handleSetFilteredList={handleSetFilteredList} />
+              <SortByButton
+                list={filteredList}
+                defaultList={fullList}
+                id="quotes"
+                handleSetFilteredList={handleSetFilteredList}
+              />
             </Col>
             <Col span={3}>
               <Tooltip title="Default">
