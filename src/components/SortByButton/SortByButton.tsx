@@ -17,7 +17,7 @@ const SortByButton = ({
   list: Quote[];
   defaultList: Quote[];
   handleSetFilteredList: Function;
-  id: string;
+  id: keyof Quote;
 }) => {
   const [isSortableBy, setIsSortableBy] = useState(DEFAULT);
 
@@ -34,7 +34,10 @@ const SortByButton = ({
     }
   };
 
-  const sortByParam = (e: React.MouseEvent<HTMLElement, MouseEvent>, param: string) => {
+  const sortByParam = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    param: keyof Quote
+  ) => {
     if (list) {
       const sortList = [...list];
       if (!defaultList.length) return;
@@ -42,7 +45,7 @@ const SortByButton = ({
 
       switch (isSortableBy) {
         case DEFAULT:
-          sortList.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
+          sortList.sort((a: Quote, b: Quote) => (a[param] > b[param] ? 1 : -1));
           setIsSortableBy(ASC);
           handleSetFilteredList(sortList);
           break;
