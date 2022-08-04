@@ -2,102 +2,56 @@ import { Button, Tooltip } from "antd";
 import {
   SortAscendingOutlined,
   SortDescendingOutlined,
-  AlignCenterOutlined
+  AlignCenterOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { Quote } from "../../utils/types";
+import { ASC, DESC, DEFAULT } from "../../utils/constants";
 
-const SortByButton = ({ list, id }: { list: Quote[] | undefined; id: any }) => {
-  const [filteredList, setFilteredList] = useState([]);
-  const [buttonName, setbuttonName] = useState("");
-  const [isSortableBy, setIsSortableBy] = useState("asc");
-
-  // const sortByParam = (e: any, param: string) => {
-  //   setbuttonName(e.currentTarget.id);
-  //   console.log("list", list);
-
-  //   if (list) {
-  //     const defaultList = [...list];
-
-  //     if (param.trim() === "") return;
-
-  //     if (!isSortableBy) {
-  //       defaultList.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
-  //       setIsSortableBy(true);
-  //     } else {
-  //       defaultList.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
-  //       setIsSortableBy(false);
-  //     }
-  //     //setFilteredList(defaultList);
-  //   }
-  // };
+const SortByButton = ({ list, defaultList, handleSetFilteredList, id }: { list: Quote[]; defaultList: Quote[]; handleSetFilteredList: Function, id: string }) => {
+  const [isSortableBy, setIsSortableBy] = useState(DEFAULT);
 
   const setIcon = (name: string) => {
     switch (name) {
-      case "asc":
+      case ASC:
         return <SortDescendingOutlined />;
-      case "desc":
+      case DESC:
         return <SortAscendingOutlined />;
-      case "def":
+      case DEFAULT:
         return <AlignCenterOutlined />;
       default:
-        return <SortAscendingOutlined />;
+        return <AlignCenterOutlined />;
     }
   };
 
   const sortByParam = (e: any, param: string) => {
-    setbuttonName(e.currentTarget.id);
-    const defaultList = [...filteredList];
-    if (!defaultList.length) return;
-    if (param.trim() === "") return;
+    if (list) {
+      const sortList = [...list];
+      if (!defaultList.length) return;
+      if (param.trim() === "") return;
 
-    switch (isSortableBy) {
-      case "asc":
-        defaultList.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
+      switch (isSortableBy) {
+        case DEFAULT:
+          sortList.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
+          setIsSortableBy(ASC);
+          handleSetFilteredList(sortList)
+          break;
 
-        setIsSortableBy("desc");
-        console.log("asc", isSortableBy);
-        setFilteredList(defaultList);
-        setIcon("desc");
+        case ASC:
+          sortList.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
+          setIsSortableBy(DESC);
+          handleSetFilteredList(sortList)
+          break;
 
-        //setIcon('desc')
-        break;
+        case DESC:
+          handleSetFilteredList(defaultList)
+          setIsSortableBy(DEFAULT);
+          break;
 
-      case "desc":
-        defaultList.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
-        setIsSortableBy("def");
-        setIcon("asc");
-
-        console.log("desc", isSortableBy);
-        setFilteredList(defaultList);
-
-        //setIcon('def')
-        break;
-
-      case "def":
-        // setFilteredList(fullList);
-        setIsSortableBy("asc");
-        setIcon("def");
-
-        // console.log('fullList', fullList)
-        // console.log('filteredList', filteredList)
-
-        //('asc')
-        break;
-
-      default:
-        // setFilteredList(fullList);
-        setIcon("asc");
+        default:
+          handleSetFilteredList(defaultList)
+      }
     }
-
-    // if (!isSortableBy) {
-    //   list.sort((a: any, b: any) => (b[param] > a[param] ? 1 : -1));
-    //   setIsSortableBy(true);
-    // } else {
-    //   list.sort((a: any, b: any) => (a[param] > b[param] ? 1 : -1));
-    //   setIsSortableBy(false);
-    // }
-    // setFilteredList(list);
   };
 
   return (
