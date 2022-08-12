@@ -1,11 +1,20 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
+
+import Quote from "./pages/Quote";
+import Home from "./pages/Home";
+
 import "./App.less";
-import QuotesListContainer from "./components/QuotesListContainer/QuotesListContainer";
+
 
 const App = () => (
   <div className="App">
     <div className="container">
-      <QuotesListContainer />
+      <Routes>
+        <Route element={<Home />} path="/"/>
+        <Route element={<Quote />} path="/random-quote" />
+
+      </Routes>
     </div>
   </div>
 );

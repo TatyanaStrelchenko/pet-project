@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 
 import { Input, Card, Spin, Button, Tooltip, Row, Col } from "antd";
 import { debounce } from "lodash";
@@ -62,19 +63,19 @@ const QuotesListContainer = () => {
       <div className="card-holder">
         <Card
           style={{
-            width: 400,
+            width: 600,
             margin: "auto",
           }}
         >
           <Row gutter={[16, 16]}>
-            <Col span={15}>
+            <Col span={12}>
               <Search
                 placeholder="Search quotes"
                 enterButton
                 onChange={debouncedChangeHandler}
               />
             </Col>
-            <Col span={3}>
+            <Col span={2}>
               <SortByButton
                 list={filteredList}
                 defaultList={fullList}
@@ -82,7 +83,7 @@ const QuotesListContainer = () => {
                 handleSetFilteredList={handleSetFilteredList}
               />
             </Col>
-            <Col span={3}>
+            <Col span={2}>
               <SortByButton
                 list={filteredList}
                 defaultList={fullList}
@@ -90,7 +91,7 @@ const QuotesListContainer = () => {
                 handleSetFilteredList={handleSetFilteredList}
               />
             </Col>
-            <Col span={3}>
+            <Col span={2}>
               <Tooltip title="Default">
                 <Button
                   type="default"
@@ -100,6 +101,15 @@ const QuotesListContainer = () => {
                 >
                   def
                 </Button>
+              </Tooltip>
+            </Col>
+            <Col span={6}>
+              <Tooltip title="Default">
+                <Link
+                  to="/random-quote"
+                  className="ant-btn ant-btn-default"
+                >Go to quote
+                </Link>
               </Tooltip>
             </Col>
           </Row>
