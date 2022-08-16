@@ -141,19 +141,19 @@ const QuotesListContainer = () => {
               </Col>
               <Col span={2}>
                 <SortByButton
-                    id="name"
+                  id="name"
                   setIcon={setIcon}
                   sortByParam={sortByParam}
                   isSortableBy={isSortableBy}
-                 />
+                />
               </Col>
               <Col span={2}>
                 <SortByButton
-                    id="quotes"
+                  id="quotes"
                   setIcon={setIcon}
                   sortByParam={sortByParam}
                   isSortableBy={isSortableBy}
-                 />
+                />
               </Col>
               <Col span={2}>
                 <Tooltip title="Default">
