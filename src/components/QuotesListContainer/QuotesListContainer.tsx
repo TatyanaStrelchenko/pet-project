@@ -31,9 +31,37 @@ const QuotesListContainer = () => {
 
   const navigate = useNavigate();
 
+  console.log('state2', history.state); 
+
+
   useEffect(() => {
     setFullList(data);
     setFilteredList(data);
+
+    const list = sessionStorage.getItem('list');
+
+    console.log('list', list)
+
+
+    if (sessionStorage.getItem('buttonName')) {
+      const buttonName = sessionStorage.getItem('buttonName')
+      console.log({buttonName})
+      if (buttonName) {
+        setIsSortableByName(buttonName)
+        console.log({isSortableByName})
+
+      }
+    } 
+    if (sessionStorage.getItem('buttonQuote')) {
+      const buttonQuote = sessionStorage.getItem('buttonQuote')
+      console.log({buttonQuote})
+
+      if (buttonQuote) {
+        setIsSortableByQuotes(buttonQuote)
+        console.log({isSortableByQuotes})
+
+      }
+    } 
   }, [data]);
 
   const setIcon = (name: string) => {
@@ -63,8 +91,10 @@ const QuotesListContainer = () => {
           sortList.sort((a: Quote, b: Quote) => (a[param] > b[param] ? 1 : -1));
           if (e.currentTarget.id === "name") {
             setIsSortableByName(ASC);
+            sessionStorage.setItem('buttonName', ASC);
           } else {
             setIsSortableByQuotes(ASC);
+            sessionStorage.setItem('buttonQuote', ASC);
           }
           setIsSortableBy(ASC);
           setFilteredList(sortList);
@@ -74,8 +104,10 @@ const QuotesListContainer = () => {
           sortList.sort((a: Quote, b: Quote) => (b[param] > a[param] ? 1 : -1));
           if (e.currentTarget.id === "name") {
             setIsSortableByName(DESC);
+            sessionStorage.setItem('buttonName', DESC);
           } else {
             setIsSortableByQuotes(DESC);
+            sessionStorage.setItem('buttonQuote', DESC);
           }
           setIsSortableBy(DESC);
           setFilteredList(sortList);
@@ -84,8 +116,10 @@ const QuotesListContainer = () => {
         case DESC:
           if (e.currentTarget.id === "name") {
             setIsSortableByName(DEFAULT);
+            sessionStorage.setItem('buttonName', DEFAULT);
           } else {
             setIsSortableByQuotes(DEFAULT);
+            sessionStorage.setItem('buttonQuote', DEFAULT);
           }
           setIsSortableBy(DEFAULT);
           setFilteredList(fullList);
@@ -119,7 +153,9 @@ const QuotesListContainer = () => {
     setFilteredList(fullList);
   };
 
-  //add state
+  const state = {
+    state: [{ name: isSortableByName }, { quote: isSortableByQuotes }, {list: filteredList}],
+  };
 
   const handleClick = () => {
     navigate("/quote");
@@ -176,6 +212,7 @@ const QuotesListContainer = () => {
                 className="ant-btn ant-btn-default"
                 to="quote"
                 onClick={handleClick}
+                state={state}
               >
                 Go to quote
               </Link>

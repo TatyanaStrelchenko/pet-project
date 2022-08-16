@@ -16,13 +16,16 @@ const Quotes = () => {
     }
   };
 
+  console.log('state', history.state); 
+
+
   useEffect(() => {
     getRandomQuote();
   }, []);
 
   return (
     <>
-      <Link className="ant-btn ant-btn-primary" to="/">
+      <Link className="ant-btn ant-btn-primary" to="/" >
         Back
       </Link>
       <h2>Quotes</h2>
