@@ -16,7 +16,7 @@ const SortByButton = ({
   <div>
     <Tooltip title={`Sort by ${id}`}>
       <Button
-        type="primary"
+        type="default"
         shape="circle"
         id={id}
         //@ts-ignore

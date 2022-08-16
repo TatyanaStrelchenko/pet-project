@@ -7,16 +7,6 @@ import {
 import { ASC, DESC, DEFAULT } from "../../utils/constants";
 
 const Icon = (name: string) => {
-  console.log({ name });
-  return (
-    <>
-      test
-      {name === ASC ? <SortDescendingOutlined /> : null}
-      {name === DESC ? <SortAscendingOutlined /> : null}
-      {name === DEFAULT ? <AlignCenterOutlined /> : null}
-    </>
-  );
-
   switch (name) {
     case ASC:
       return <SortDescendingOutlined />;

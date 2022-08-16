@@ -26,6 +26,9 @@ const QuotesListContainer = () => {
   const [filteredList, setFilteredList] = useState<Quote[]>([]);
   const { data, isError, isLoading } = useFetchQuotes();
   const [isSortableBy, setIsSortableBy] = useState(DEFAULT);
+  const [isSortableByName, setIsSortableByName] = useState(DEFAULT);
+  const [isSortableByQuotes, setIsSortableByQuotes] = useState(DEFAULT);
+
 
   const navigate = useNavigate();
 
@@ -34,9 +37,9 @@ const QuotesListContainer = () => {
     setFilteredList(data);
   }, [data]);
 
-  const handleSetFilteredList = (newList: Quote[]) => {
-    setFilteredList(newList);
-  };
+  // const handleSetFilteredList = (newList: Quote[]) => {
+  //   setFilteredList(newList);
+  // };
 
   const setIcon = (name: string) => {
     switch (name) {
@@ -63,23 +66,38 @@ const QuotesListContainer = () => {
       switch (isSortableBy) {
         case DEFAULT:
           sortList.sort((a: Quote, b: Quote) => (a[param] > b[param] ? 1 : -1));
+          if (e.currentTarget.id === "name") {
+            setIsSortableByName(ASC);
+          } else {
+            setIsSortableByQuotes(ASC);
+          }
           setIsSortableBy(ASC);
-          handleSetFilteredList(sortList);
+          setFilteredList(sortList);
           break;
 
         case ASC:
           sortList.sort((a: Quote, b: Quote) => (b[param] > a[param] ? 1 : -1));
+          if (e.currentTarget.id === "name") {
+            setIsSortableByName(DESC);
+          } else {
+            setIsSortableByQuotes(DESC);
+          }
           setIsSortableBy(DESC);
-          handleSetFilteredList(sortList);
+          setFilteredList(sortList);
           break;
 
         case DESC:
-          handleSetFilteredList(fullList);
+          if (e.currentTarget.id === "name") {
+            setIsSortableByName(DEFAULT);
+          } else {
+            setIsSortableByQuotes(DEFAULT);
+          }
           setIsSortableBy(DEFAULT);
+          setFilteredList(fullList);
           break;
 
         default:
-          handleSetFilteredList(fullList);
+          setFilteredList(fullList);
       }
     }
   };
@@ -144,7 +162,7 @@ const QuotesListContainer = () => {
                   id="name"
                   setIcon={setIcon}
                   sortByParam={sortByParam}
-                  isSortableBy={isSortableBy}
+                  isSortableBy={isSortableByName}
                 />
               </Col>
               <Col span={2}>
@@ -152,7 +170,7 @@ const QuotesListContainer = () => {
                   id="quotes"
                   setIcon={setIcon}
                   sortByParam={sortByParam}
-                  isSortableBy={isSortableBy}
+                  isSortableBy={isSortableByQuotes}
                 />
               </Col>
               <Col span={2}>
