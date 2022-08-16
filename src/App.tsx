@@ -6,14 +6,13 @@ import Home from "./pages/Home";
 
 import "./App.less";
 
-
 const App = () => (
   <div className="App">
     <div className="container">
       <Routes>
-        <Route element={<Home />} path="/"/>
-        <Route element={<Quote />} path="/random-quote" />
-
+        <Route element={<Home />} path="/" />
+        <Route element={<Quote />} path="/quote" />
+        <Route element={<div>Not found</div>} path="*" />
       </Routes>
     </div>
   </div>
