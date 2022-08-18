@@ -33,29 +33,30 @@ const QuotesListContainer = () => {
   useEffect(() => {
     if (!isEmpty(data)) {
       setFullList([...data]);
-      setFilteredList(data);
+      setFilteredList([...data]);
     }
   }, [data]);
 
   useEffect(() => {
     if (sessionStorage.getItem("buttonName")) {
       const buttonName = sessionStorage.getItem("buttonName");
+      console.log({ buttonName })
       if (buttonName) {
         setIsSortableByName(buttonName);
       }
     }
     if (sessionStorage.getItem("buttonQuotes")) {
-      const buttonQuote = sessionStorage.getItem("buttonQuotes");
+      const buttonQuotes = sessionStorage.getItem("buttonQuotes");
+      console.log({ buttonQuotes })
 
-      if (buttonQuote) {
-        setIsSortableByQuotes(buttonQuote);
+      if (buttonQuotes) {
+        setIsSortableByQuotes(buttonQuotes);
       }
     }
   }, [isSortableByName, isSortableByQuotes]);
 
   const sortByParam = (
-    e: React.MouseEvent<HTMLElement, MouseEvent>,
-    param: keyof Quote
+    param: keyof Quote,
   ) => {
     if (filteredList) {
       const sortList = [...filteredList];
@@ -63,7 +64,7 @@ const QuotesListContainer = () => {
       if (!fullList.length) return;
       if (param.trim() === "") return;
 
-      if (e.currentTarget.id === "name") {
+      if (param === "name") {
         switch (isSortableByName) {
           case DEFAULT:
             sortList.sort((a: Quote, b: Quote) =>
@@ -96,7 +97,7 @@ const QuotesListContainer = () => {
         }
       }
 
-      if (e.currentTarget.id === "quotes") {
+      if (param === "quotes") {
         switch (isSortableByQuotes) {
           case DEFAULT:
             sortList.sort((a: Quote, b: Quote) =>
@@ -128,6 +129,27 @@ const QuotesListContainer = () => {
       }
     }
   };
+
+  const getStorageParams = () => {
+    if (sessionStorage.getItem("buttonName")) {
+      const buttonName = sessionStorage.getItem("buttonName");
+      if (buttonName) {
+        setIsSortableByName(buttonName);
+      }
+    }
+    if (sessionStorage.getItem("buttonQuotes")) {
+      const buttonQuotes = sessionStorage.getItem("buttonQuotes");
+
+      if (buttonQuotes) {
+        setIsSortableByQuotes(buttonQuotes);
+      }
+    }
+  }
+
+  useEffect(() => {
+    getStorageParams();
+
+  }, [])
 
   const setIcon = (name: string) => {
     switch (name) {
@@ -194,6 +216,7 @@ const QuotesListContainer = () => {
                 setIcon={setIcon}
                 sortByParam={sortByParam}
                 isSortableBy={isSortableByName}
+               
               />
             </Col>
             <Col span={2}>
@@ -202,6 +225,7 @@ const QuotesListContainer = () => {
                 setIcon={setIcon}
                 sortByParam={sortByParam}
                 isSortableBy={isSortableByQuotes}
+     
               />
             </Col>
             <Col span={2}>

@@ -11,20 +11,21 @@ const SortByButton = ({
   id: keyof Quote;
   setIcon: any;
   sortByParam: any;
-  isSortableBy: string;
-}) => (
-  <div>
+    isSortableBy: string;
+  }) => (
+    <div>
     <Tooltip title={`Sort by ${id}`}>
-      <Button
-        type="default"
-        shape="circle"
-        id={id}
-        //@ts-ignore
-        icon={setIcon(isSortableBy)}
-        onClick={(e) => sortByParam(e, id)}
+        <Button
+          type="default"
+          shape="circle"
+          id={id}
+          //@ts-ignore
+          icon={setIcon(isSortableBy)}
+          onClick={() => sortByParam(id)}
       />
     </Tooltip>
   </div>
-);
+  )
+
 
 export default SortByButton;
