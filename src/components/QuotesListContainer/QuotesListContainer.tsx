@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Input, Card, Spin, Button, Tooltip, Row, Col } from "antd";
-import { debounce, sortBy } from "lodash";
+import { debounce, isEmpty, sortBy } from "lodash";
 
 import {
   SortAscendingOutlined,
@@ -30,10 +30,15 @@ const QuotesListContainer = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setFullList(data);
-    setFilteredList(data);
+  useEffect(() => { 
+    if (!isEmpty(data)) {
+      setFullList([...data]);
+      setFilteredList(data);
+    }
+  
+  }, [data]);
 
+  useEffect(() => {
     if (sessionStorage.getItem("buttonName")) {
       const buttonName = sessionStorage.getItem("buttonName");
       if (buttonName) {
@@ -47,12 +52,13 @@ const QuotesListContainer = () => {
         setIsSortableByQuotes(buttonQuote);
       }
     }
-  }, [data, isSortableByName, isSortableByQuotes]);
+  }, [isSortableByName, isSortableByQuotes]);
 
   const sortByParam = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     param: keyof Quote
   ) => {
+    
     if (filteredList) {
       const sortList = filteredList;
 
@@ -60,8 +66,6 @@ const QuotesListContainer = () => {
       if (param.trim() === "") return;
 
       if (e.currentTarget.id === "name") {
-        //@ts-ignore
-        sortBy(isSortableByName, 'name', sortList)
         switch (isSortableByName) {
           case DEFAULT:
             sortList.sort((a: Quote, b: Quote) =>
