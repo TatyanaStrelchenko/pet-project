@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Input, Card, Spin, Button, Tooltip, Row, Col } from "antd";
-import { debounce } from "lodash";
+import { debounce, sortBy } from "lodash";
 
 import {
   SortAscendingOutlined,
@@ -23,7 +23,6 @@ const { Search } = Input;
 const QuotesListContainer = () => {
   const [fullList, setFullList] = useState([]);
   const [filteredList, setFilteredList] = useState<Quote[]>([]);
-  const [isSortableBy, setIsSortableBy] = useState(DEFAULT);
   const [isSortableByName, setIsSortableByName] = useState(DEFAULT);
   const [isSortableByQuotes, setIsSortableByQuotes] = useState(DEFAULT);
 
@@ -31,38 +30,102 @@ const QuotesListContainer = () => {
 
   const navigate = useNavigate();
 
-  console.log('state2', history.state); 
-
-
   useEffect(() => {
     setFullList(data);
     setFilteredList(data);
 
-    const list = sessionStorage.getItem('list');
-
-    console.log('list', list)
-
-
-    if (sessionStorage.getItem('buttonName')) {
-      const buttonName = sessionStorage.getItem('buttonName')
-      console.log({buttonName})
+    if (sessionStorage.getItem("buttonName")) {
+      const buttonName = sessionStorage.getItem("buttonName");
       if (buttonName) {
-        setIsSortableByName(buttonName)
-        console.log({isSortableByName})
-
+        setIsSortableByName(buttonName);
       }
-    } 
-    if (sessionStorage.getItem('buttonQuote')) {
-      const buttonQuote = sessionStorage.getItem('buttonQuote')
-      console.log({buttonQuote})
+    }
+    if (sessionStorage.getItem("buttonQuotes")) {
+      const buttonQuote = sessionStorage.getItem("buttonQuotes");
 
       if (buttonQuote) {
-        setIsSortableByQuotes(buttonQuote)
-        console.log({isSortableByQuotes})
-
+        setIsSortableByQuotes(buttonQuote);
       }
-    } 
-  }, [data]);
+    }
+  }, [data, isSortableByName, isSortableByQuotes]);
+
+  const sortByParam = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    param: keyof Quote
+  ) => {
+    if (filteredList) {
+      const sortList = filteredList;
+
+      if (!fullList.length) return;
+      if (param.trim() === "") return;
+
+      if (e.currentTarget.id === "name") {
+        //@ts-ignore
+        sortBy(isSortableByName, 'name', sortList)
+        switch (isSortableByName) {
+          case DEFAULT:
+            sortList.sort((a: Quote, b: Quote) =>
+              a[param] > b[param] ? 1 : -1
+            );
+            setIsSortableByName(ASC);
+            sessionStorage.setItem("buttonName", ASC);
+            setFilteredList(sortList);
+            break;
+
+          case ASC:
+            sortList.sort((a: Quote, b: Quote) =>
+              b[param] > a[param] ? 1 : -1
+            );
+            setIsSortableByName(DESC);
+            sessionStorage.setItem("buttonName", DESC);
+            setFilteredList(sortList);
+
+            break;
+
+          case DESC:
+            setIsSortableByName(DEFAULT);
+            sessionStorage.setItem("buttonName", DEFAULT);
+            setFilteredList(fullList);
+
+            break;
+
+          default:
+            setIsSortableByName(DEFAULT);
+        }
+      }
+
+      if (e.currentTarget.id === "quotes") {
+        switch (isSortableByQuotes) {
+          case DEFAULT:
+            sortList.sort((a: Quote, b: Quote) =>
+              a[param] > b[param] ? 1 : -1
+            );
+            setIsSortableByQuotes(ASC);
+            sessionStorage.setItem("buttonQuotes", ASC);
+            setFilteredList(sortList);
+            break;
+
+          case ASC:
+            sortList.sort((a: Quote, b: Quote) =>
+              b[param] > a[param] ? 1 : -1
+            );
+            setIsSortableByQuotes(DESC);
+            sessionStorage.setItem("buttonQuotes", DESC);
+            setFilteredList(sortList);
+            break;
+
+          case DESC:
+            setIsSortableByQuotes(DEFAULT);
+            sessionStorage.setItem("buttonQuotes", DEFAULT);
+            setFilteredList(fullList);
+            break;
+
+          default:
+            setIsSortableByQuotes(DEFAULT);
+        }
+      }
+    }
+  };
 
   const setIcon = (name: string) => {
     switch (name) {
@@ -74,60 +137,6 @@ const QuotesListContainer = () => {
         return <AlignCenterOutlined />;
       default:
         return <AlignCenterOutlined />;
-    }
-  };
-
-  const sortByParam = (
-    e: React.MouseEvent<HTMLElement, MouseEvent>,
-    param: keyof Quote
-  ) => {
-    if (filteredList) {
-      const sortList = [...filteredList];
-      if (!fullList.length) return;
-      if (param.trim() === "") return;
-
-      switch (isSortableBy) {
-        case DEFAULT:
-          sortList.sort((a: Quote, b: Quote) => (a[param] > b[param] ? 1 : -1));
-          if (e.currentTarget.id === "name") {
-            setIsSortableByName(ASC);
-            sessionStorage.setItem('buttonName', ASC);
-          } else {
-            setIsSortableByQuotes(ASC);
-            sessionStorage.setItem('buttonQuote', ASC);
-          }
-          setIsSortableBy(ASC);
-          setFilteredList(sortList);
-          break;
-
-        case ASC:
-          sortList.sort((a: Quote, b: Quote) => (b[param] > a[param] ? 1 : -1));
-          if (e.currentTarget.id === "name") {
-            setIsSortableByName(DESC);
-            sessionStorage.setItem('buttonName', DESC);
-          } else {
-            setIsSortableByQuotes(DESC);
-            sessionStorage.setItem('buttonQuote', DESC);
-          }
-          setIsSortableBy(DESC);
-          setFilteredList(sortList);
-          break;
-
-        case DESC:
-          if (e.currentTarget.id === "name") {
-            setIsSortableByName(DEFAULT);
-            sessionStorage.setItem('buttonName', DEFAULT);
-          } else {
-            setIsSortableByQuotes(DEFAULT);
-            sessionStorage.setItem('buttonQuote', DEFAULT);
-          }
-          setIsSortableBy(DEFAULT);
-          setFilteredList(fullList);
-          break;
-
-        default:
-          setFilteredList(fullList);
-      }
     }
   };
 
@@ -153,9 +162,7 @@ const QuotesListContainer = () => {
     setFilteredList(fullList);
   };
 
-  const state = {
-    state: [{ name: isSortableByName }, { quote: isSortableByQuotes }, {list: filteredList}],
-  };
+  const state = { filteredList };
 
   const handleClick = () => {
     navigate("/quote");
