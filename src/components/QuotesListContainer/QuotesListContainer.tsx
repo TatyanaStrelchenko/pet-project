@@ -30,12 +30,11 @@ const QuotesListContainer = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!isEmpty(data)) {
       setFullList([...data]);
       setFilteredList(data);
     }
-  
   }, [data]);
 
   useEffect(() => {
@@ -58,9 +57,8 @@ const QuotesListContainer = () => {
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     param: keyof Quote
   ) => {
-    
     if (filteredList) {
-      const sortList = filteredList;
+      const sortList = [...filteredList];
 
       if (!fullList.length) return;
       if (param.trim() === "") return;
