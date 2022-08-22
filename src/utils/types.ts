@@ -1,4 +1,4 @@
-export type Quote = {
+export type QuoteType = {
   name: string;
   quotes: string;
 };

@@ -1,6 +1,6 @@
 import { Button, Tooltip } from "antd";
 
-import { Quote } from "../../utils/types";
+import { QuoteType } from "../../utils/types";
 
 const SortByButton = ({
   id,
@@ -8,24 +8,23 @@ const SortByButton = ({
   sortByParam,
   isSortableBy,
 }: {
-  id: keyof Quote;
+  id: keyof QuoteType;
   setIcon: any;
   sortByParam: any;
-    isSortableBy: string;
-  }) => (
-    <div>
+  isSortableBy: string;
+}) => (
+  <div>
     <Tooltip title={`Sort by ${id}`}>
-        <Button
-          type="default"
-          shape="circle"
-          id={id}
-          //@ts-ignore
-          icon={setIcon(isSortableBy)}
-          onClick={() => sortByParam(id)}
+      <Button
+        type="default"
+        shape="circle"
+        id={id}
+        //@ts-ignore
+        icon={setIcon(isSortableBy)}
+        onClick={() => sortByParam(id)}
       />
     </Tooltip>
   </div>
-  )
-
+);
 
 export default SortByButton;

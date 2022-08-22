@@ -2,10 +2,10 @@ import { Spin } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ListContext } from "../../App";
-import { Quote } from "../../utils/types";
+import { QuoteType } from "../../utils/types";
 
 const Quotes = () => {
-  const [quote, setQuote] = useState<Quote>();
+  const [quote, setQuote] = useState<QuoteType>();
   const list = useContext(ListContext);
 
   const getRandomQuote = async () => {
