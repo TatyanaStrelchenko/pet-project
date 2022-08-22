@@ -61,7 +61,8 @@
     "@typescript-eslint/no-throw-literal": "off",
     "@typescript-eslint/lines-between-class-members": "off",
     "no-else-return": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "no-restricted-globals": ["off", "event", "fdescribe"]
   },
   "overrides": [
     {
