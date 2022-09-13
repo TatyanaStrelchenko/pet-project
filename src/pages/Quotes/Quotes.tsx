@@ -1,16 +1,22 @@
-import { Spin } from "antd";
 import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Spin } from "antd";
 import { Link } from "react-router-dom";
 import { ListContext } from "../../App";
 import { QuoteType } from "../../utils/types";
 
 const Quotes = () => {
   const [quote, setQuote] = useState<QuoteType>();
-  const list = useContext(ListContext);
+  //const list = useContext(ListContext);
+
+  //@ts-ignore
+  const quotes = useSelector((state: RootState) => state.list.value)
+
+  console.log({quotes})
 
   const getRandomQuote = async () => {
     const num = Math.floor(Math.random() * 10);
-    const randomQuote = list.find((item, index) => item[index] === item[num]);
+    const randomQuote = quotes.find((item:any, index:string) => item[index] === item[num]);
     if (randomQuote) {
       setQuote(randomQuote);
     }
@@ -18,6 +24,7 @@ const Quotes = () => {
 
   useEffect(() => {
     getRandomQuote();
+
   }, []);
 
   return (

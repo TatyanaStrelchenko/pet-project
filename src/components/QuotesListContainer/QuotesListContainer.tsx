@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { Input, Card, Button, Tooltip, Row, Col } from "antd";
 import { debounce, isEmpty } from "lodash";
@@ -9,6 +10,7 @@ import {
   SortDescendingOutlined,
   AlignCenterOutlined,
 } from "@ant-design/icons";
+import { increment, updateList } from '../../store/listSlice'
 
 import QuotesList from "../QuotesList";
 import { ListContext } from "../../App";
@@ -29,6 +31,8 @@ const QuotesListContainer = () => {
   const data = useContext(ListContext);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+
 
   useEffect(() => {
     if (!isEmpty(data)) {
@@ -36,6 +40,13 @@ const QuotesListContainer = () => {
       setFilteredList(data);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!isEmpty(data)) {
+      //@ts-ignore
+      dispatch(updateList(data))
+    }
+  }, [data, dispatch]);
 
   const getStorageParams = () => {
     if (sessionStorage.getItem("buttonName")) {
@@ -54,7 +65,7 @@ const QuotesListContainer = () => {
   };
 
   useEffect(() => {
-    getStorageParams()
+    getStorageParams();
   }, [isSortableByName, isSortableByQuotes]);
 
   const sortByParam = (param: keyof QuoteType) => {

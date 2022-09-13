@@ -4,7 +4,7 @@ import { Spin } from "antd";
 
 import { useFetchQuotes } from "./hooks/useFetchQuotes";
 
-import Quote from "./pages/Quote";
+import Quotes from "./pages/Quotes";
 import Home from "./pages/Home";
 
 import "./App.less";
@@ -28,7 +28,7 @@ const App = () => {
         <div className="container">
           <Routes>
             <Route element={<Home />} path="/" />
-            <Route element={<Quote />} path="/quote" />
+            <Route element={<Quotes />} path="/quote" />
             <Route element={<div>Not found</div>} path="*" />
           </Routes>
         </div>

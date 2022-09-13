@@ -1,6 +1,10 @@
 import { QuoteType } from "./types";
 
-export const sortBy = (type: string, param: keyof QuoteType, list: QuoteType[]) => {
+export const sortBy = (
+  type: string,
+  param: keyof QuoteType,
+  list: QuoteType[]
+) => {
   switch (type) {
     case "asc":
       list.sort((a: QuoteType, b: QuoteType) => (a[param] > b[param] ? 1 : -1));
